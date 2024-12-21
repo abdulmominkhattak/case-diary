@@ -1,0 +1,105 @@
+<div class="container">
+  <!-- Side Menu -->
+  <div class="side-menu" [class.active]="isSideMenuOpen">
+    <div class="side-menu-content">
+      <div class="menu-items">
+        <button class="menu-item" (click)="logout()">
+          Logout
+        </button>
+      </div>
+    </div>
+    <div class="side-menu-overlay" (click)="toggleSideMenu()"></div>
+  </div>
+
+  <header>
+    <div class="title-container">
+      <h1 class="app-title">Advocate's Diary</h1>
+      <div class="title-underline"></div>
+    </div>
+    <button (click)="toggleSideMenu()" class="menu-btn">
+      <span class="menu-icon"></span>
+    </button>
+  </header>
+
+  <div class="actions-bar">
+    <button (click)="showCreateForm()" class="create-btn">
+      <span class="icon">+</span> New Case
+    </button>
+  </div>
+
+  <div class="search-section">
+    <input type="date" [ngModel]="selectedDate | date:'yyyy-MM-dd'" (ngModelChange)="onDateChange($event)"
+      class="date-picker">
+    <button (click)="searchCases()" class="search-btn">Search</button>
+  </div>
+
+  <div class="cases-list" *ngIf="cases.length > 0">
+    <div *ngFor="let case of cases" class="case-card" (click)="editCase(case)">
+      <h3>{{ case.caseDescription }}</h3>
+      <p>Prev Date: {{case.previousDate}}</p>
+      <p>Court: {{ case.courtDescription }}</p>
+      <p>Status: {{ case.caseStatus }}</p>
+      <p>Next Date: {{ case.nextDate}}</p>
+    </div>
+  </div>
+
+  <div *ngIf="cases.length === 0" class="no-cases">
+    No cases found for {{selectedDate}}
+  </div>
+
+  <!-- Create Case Modal -->
+  <div *ngIf="showCreateModal" class="modal">
+    <div class="modal-content">
+      <h2>New Case Entry</h2>
+      <form (ngSubmit)="createCase()" #caseForm="ngForm">
+        <div class="form-group">
+          <label>Previous Date</label>
+          <input type="date" [ngModel]="newCase.previousDate | date:'yyyy-MM-dd'"
+            (ngModelChange)="onPreviousDateChange($event)" name="previousDate" required>
+        </div>
+        <div class="form-group">
+          <label>Case Description</label>
+          <input type="text" [(ngModel)]="newCase.caseDescription" name="caseDescription" required>
+        </div>
+        <div class="form-group">
+          <label>Court Description</label>
+          <input type="text" [(ngModel)]="newCase.courtDescription" name="courtDescription" required>
+        </div>
+        <div class="form-group">
+          <label>Case Status</label>
+          <textarea [(ngModel)]="newCase.caseStatus" name="caseStatus" rows="3" required></textarea>
+        </div>
+        <div class="form-group">
+          <label>Next Date</label>
+          <input type="date" [ngModel]="newCase.nextDate | date:'yyyy-MM-dd'" (ngModelChange)="onNextDateChange($event)"
+            name="nextDate" required>
+        </div>
+        <div class="modal-actions">
+          <button type="submit" [disabled]="!caseForm.form.valid">Create</button>
+          <button type="button" (click)="showCreateModal = false">Cancel</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Edit Case Modal -->
+  <div *ngIf="selectedCase" class="modal">
+    <div class="modal-content">
+      <h2>Update Case</h2>
+      <div class="form-group">
+        <label>Status</label>
+        <textarea [(ngModel)]="selectedCase.caseStatus" rows="3" placeholder="Enter case status..."
+          class="status-textarea"></textarea>
+      </div>
+      <div class="form-group">
+        <label>Next Date</label>
+        <input type="date" [ngModel]="selectedCase.nextDate | date:'yyyy-MM-dd'"
+          (ngModelChange)="onEditNextDateChange($event)" required min={{minDateForUpdate}}>
+      </div>
+      <div class="modal-actions">
+        <button (click)="updateCase()">Update</button>
+        <button (click)="selectedCase = null">Cancel</button>
+      </div>
+    </div>
+  </div>
+</div>

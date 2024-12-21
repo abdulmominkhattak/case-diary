@@ -1,0 +1,104 @@
+.menu-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  width: 30px;
+  height: 30px;
+  position: relative;
+  z-index: 1001;
+}
+
+.menu-icon,
+.menu-icon::before,
+.menu-icon::after {
+  display: block;
+  width: 24px;
+  height: 2px;
+  background: #2c3e50;
+  position: absolute;
+  transition: transform 0.3s, background-color 0.3s;
+}
+
+.menu-icon {
+  top: 14px;
+  left: 3px;
+}
+
+.menu-icon::before {
+  content: '';
+  top: -8px;
+  left: 0;
+}
+
+.menu-icon::after {
+  content: '';
+  bottom: -8px;
+  left: 0;
+}
+
+.side-menu {
+  position: fixed;
+  top: 0;
+  right: -300px;
+  height: 100vh;
+  width: 300px;
+  z-index: 1000;
+  transition: right 0.3s ease;
+}
+
+.side-menu.active {
+  right: 0;
+}
+
+.side-menu-content {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 300px;
+  height: 100%;
+  background: white;
+  box-shadow: -2px 0 8px rgba(0,0,0,0.1);
+  padding: 2rem;
+  z-index: 2;
+}
+
+.side-menu-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0,0,0,0.5);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s;
+  z-index: 1;
+}
+
+.side-menu.active .side-menu-overlay {
+  opacity: 1;
+  visibility: visible;
+}
+
+.menu-items {
+  margin-top: 3rem;
+}
+
+.menu-item {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  width: 100%;
+  padding: 1rem;
+  background: none;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  color: #2c3e50;
+  font-size: 1rem;
+  transition: background-color 0.2s;
+}
+
+.menu-item:hover {
+  background-color: #f5f6fa;
+}
