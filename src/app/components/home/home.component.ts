@@ -5,6 +5,7 @@ import { CaseService, CaseEntry } from '../../services/case.service';
 import { AuthService } from '../../services/auth.service';
 import { Router } from '@angular/router';
 import { DateUtils } from '../../utils/date.utils';
+import { LoadingService } from 'src/app/services/loading.service';
 
 interface NewCaseEntry {
   previousDate: string;
@@ -42,11 +43,11 @@ export class HomeComponent implements OnInit {
     private caseService: CaseService,
     private authService: AuthService,
     private router: Router,
-    private dateUtils: DateUtils
+    private dateUtils: DateUtils,
+    private loadingService: LoadingService
   ) {
-    const today = this.dateUtils.getCurrentDate();
-    this.minDateForUpdate = this.dateUtils.formatDateForInput(today);
-    this.selectedDate = this.dateUtils.formatDateForInput(today);
+    this.selectedDate = this.dateUtils.getCurrentDate();
+    this.minDateForUpdate = this.dateUtils.getTomorrowsDate();
     this.newCase = this.initializeNewCase();
   }
 
@@ -55,14 +56,13 @@ export class HomeComponent implements OnInit {
   }
 
   private initializeNewCase(): NewCaseEntry {
-    const today = this.dateUtils.getCurrentDate();
     return {
-      previousDate: this.dateUtils.formatDateForInput(today),
+      previousDate: '',
       caseDescription: '',
       courtDescription: '',
       caseStatus: '',
-      cdate: this.dateUtils.formatDateForInput(today),
-      nextDate: this.dateUtils.formatDateForInput(today)
+      cdate: this.dateUtils.getCurrentDate(),
+      nextDate: ''
     };
   }
 
@@ -92,9 +92,12 @@ export class HomeComponent implements OnInit {
   searchCases() {
     const user = this.authService.getUser();
     if (user) {
+      this.loadingService.show();
+      console.log("searching cases", this.selectedDate)
       this.caseService.getCases(user.userId, this.selectedDate)
         .subscribe(cases => {
           this.cases = cases;
+          this.loadingService.hide();
         });
     }
   }
@@ -102,6 +105,7 @@ export class HomeComponent implements OnInit {
   createCase() {
     const user = this.authService.getUser();
     if (user) {
+      this.loadingService.show
       const caseData = {
         userId: user.userId,
         ...this.newCase
@@ -110,6 +114,8 @@ export class HomeComponent implements OnInit {
       this.caseService.createCase(caseData).then(() => {
         this.showCreateModal = false;
         this.searchCases();
+        console.log("cases crete")
+        this.loadingService.hide();
         this.newCase = this.initializeNewCase();
       });
     }
@@ -125,11 +131,13 @@ export class HomeComponent implements OnInit {
         caseStatus: this.selectedCase.caseStatus,
         nextDate: this.selectedCase.nextDate
       };
+      this.loadingService.show();
 
       this.caseService.updateCase(this.selectedCase.id, updateData)
         .then(() => {
           this.searchCases();
           this.selectedCase = null;
+          this.loadingService.hide();
         });
     }
   }

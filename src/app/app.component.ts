@@ -1,11 +1,16 @@
 import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
+import { LoaderComponent } from './components/shared/loader.component';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet],
-  template: `<router-outlet></router-outlet>`,
+  imports: [RouterOutlet, LoaderComponent],
+  template: `
+  <router-outlet></router-outlet>
+    <app-loader></app-loader>
+  
+  `,
   styles: [`
     :host {
       display: block;
@@ -14,4 +19,4 @@ import { RouterOutlet } from '@angular/router';
     }
   `]
 })
-export class AppComponent {}
+export class AppComponent { }

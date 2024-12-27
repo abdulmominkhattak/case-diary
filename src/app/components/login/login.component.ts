@@ -11,7 +11,7 @@ import { CommonModule } from '@angular/common';
   template: `
     <div class="login-container">
       <form [formGroup]="loginForm" (ngSubmit)="onLogin()" class="login-form">
-        <h2>Lawyer's Diary</h2>
+        <h3>Advocates Diary</h3>
         <div class="form-group">
           <label for="email">Email</label>
           <input 
@@ -21,13 +21,14 @@ import { CommonModule } from '@angular/common';
             class="form-control">
         </div>
         <div class="form-group">
-          <label for="password">Password</label>
-          <input 
-            id="password" 
-            type="password" 
+      <label for="password">Password</label>
+      <div class="password-container">
+        <input [type]="showPassword ? 'text' : 'password'"  id="password"
             formControlName="password"
             class="form-control">
-        </div>
+            <i class="bi bi-eye-fill" (click)="togglePasswordVisibility()"></i>
+      </div>
+    </div>
         <button type="submit">Login</button>
         <button type="button" (click)="onSignUp()">Sign Up</button>
         <div *ngIf="error" class="error-message">
@@ -80,11 +81,26 @@ import { CommonModule } from '@angular/common';
       margin-top: 1rem;
       text-align: center;
     }
+    .password-container {
+  display: flex;
+  align-items: center;
+  }
+
+  .password-container button {
+    margin-left: 0.5rem;
+    padding: 0.5rem;
+    background: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
   `]
 })
 export class LoginComponent {
   loginForm: FormGroup;
   error: string = '';
+  showPassword: boolean = false; // Property to track password visibility
 
   constructor(
     private fb: FormBuilder,
@@ -105,6 +121,9 @@ export class LoginComponent {
         error: () => (this.error = 'Invalid credentials'),
       });
     }
+  }
+  togglePasswordVisibility() {
+    this.showPassword = !this.showPassword;
   }
 
   onSignUp() {
