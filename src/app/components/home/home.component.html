@@ -55,7 +55,7 @@
         <div class="form-group">
           <label>Previous Date</label>
           <input type="date" [ngModel]="newCase.previousDate | date:'yyyy-MM-dd'"
-            (ngModelChange)="onPreviousDateChange($event)" name="previousDate" required>
+            (ngModelChange)="onPreviousDateChange($event)" name="previousDate">
         </div>
         <div class="form-group">
           <label>Case Description</label>
@@ -72,7 +72,7 @@
         <div class="form-group">
           <label>Next Date</label>
           <input type="date" [ngModel]="newCase.nextDate | date:'yyyy-MM-dd'" (ngModelChange)="onNextDateChange($event)"
-            name="nextDate" required>
+            name="nextDate">
         </div>
         <div class="modal-actions">
           <button type="submit" [disabled]="!caseForm.form.valid">Create</button>

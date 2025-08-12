@@ -4,17 +4,21 @@ import { Injectable } from '@angular/core';
   providedIn: 'root'
 })
 export class DateUtils {
-  formatDateForInput(date: Date): string {
-    return date.toISOString().split('T')[0];
+
+  private formatDateForInput(date: Date): string {
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are 0-based
+    const day = String(date.getDate()).padStart(2, '0');
+
+    return `${year}-${month}-${day}`;
   }
 
-  formatDateForDisplay(date: string): string {
-    if (!date) return '';
-    const [year, month, day] = date.split('-');
-    return `${day}-${month}-${year}`;
+  getCurrentDate(): string {
+    return this.formatDateForInput(new Date());
   }
 
-  getCurrentDate(): Date {
-    return new Date();
+  getTomorrowsDate(): string {
+    const today = new Date();
+    return this.formatDateForInput(new Date(today.setDate(today.getDate() + 1)));
   }
 }
